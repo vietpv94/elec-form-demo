@@ -1,0 +1,16 @@
+{
+  "name": "electron-form-demo",
+  "description": "electron Squirrel demo!",
+  "version": "0.1.0",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "devDependencies": {
+    "electron": "^2.0.0",
+    "electron-installer-debian": "^0.8.1",
+    "electron-installer-dmg": "^1.0.0",
+    "electron-packager": "^12.0.2",
+    "electron-winstaller": "^2.6.4"
+  }
+}
