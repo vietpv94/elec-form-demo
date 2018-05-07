@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Electron Form Demo</title>
+
+		<!-- Bootstrap CSS -->
+		<link href="assets/css/bootstrap/bootstrap.min.css" rel="stylesheet">
+		<link href="assets/css/style/style.css" rel="stylesheet">
+		<link href="assets/css/fontawesome-free-5.0.12/web-fonts-with-css/css/fontawesome-all.min.css" rel="stylesheet">
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        
+		<script src="assets/js/bootstrap.min.js"></script>
+	</head>
+	<body>
+		<div class="container">
+			<div class="row">				
+					<div class="form box-shadow">
+						<div class="col-md-12">
+                            <h4 class="card-title" id="from-actions-top-bottom-left">Issue Tracking</h4>
+                            <div class="heading-elements">
+                                <ul class="list-inline">
+                                    <li><a data-toggle="collapse" href="#formdemo" role="button" aria-expanded="true" aria-controls="formdemo"><i class="fas fa-minus"></i></a></li>
+                                    <li><a data-action="reload" href=""><i class="fas fa-redo"></i></a></li>
+                                    <li><a data-action="expand" href=""><i class="fas fa-expand"></i></a></li>
+                                    <li><a data-action="close" href=""><i class="fas fa-times"></i></a></li>
+                                </ul>
+                            </div>
+							<form id="formdemo" class="collapse">
+								<div class="form-group">
+								<label class='control-label'>Issue Title</label>
+								<input type="text" class="form-control" id="" placeholder="Issue title">
+								</div>
+								<div class="form-group">
+								<label class='control-label'>Opened By</label>
+								<input type="text" class="form-control" id="" placeholder="opened by">
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-6 mb-2">
+                                        <label for="issueinput3">Date Opened</label>
+                                        <input id="issueinput3" class="form-control" name="dateopened" data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="Date Opened" data-original-title="" title="" type="date">
+                                    </div>
+                                    <div class="form-group col-md-6 mb-2">
+                                        <label for="issueinput4">Date Fixed</label>
+                                        <input id="issueinput4" class="form-control" name="datefixed" data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="Date Fixed" data-original-title="" title="" type="date">
+                                    </div>
+                                </div>
+								<div class="form-group">
+								<label class='control-label'>Priority</label>
+								<select id="" name="priority" class="form-control" data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="Priority" data-original-title="" title="">
+                                    <option value="low">Low</option>
+                                    <option value="medium">Medium</option>
+                                    <option value="high">High</option>
+                                </select>
+								</div>
+								<div class="form-group">
+								<label class='control-label'>Status</label>
+								<select id="" name="status" class="form-control" data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="Status" data-original-title="" title="">
+                                    <option value="not started">Not Started</option>
+                                    <option value="started">Started</option>
+                                    <option value="fixed">Fixed</option>
+                                </select>
+								</div>
+								<div class="form-group">
+								    <label class='control-label'>Comments</label>
+								    <textarea class="form-control" rows="4" id="" placeholder="Comments"></textarea>
+								</div>
+								
+								<div class="form-actions form-group">
+                                    <button type="button" class="btn btn-warning">
+                                        <i class="fas fa-times">
+                                            Cancel
+                                        </i>
+                                    </button>
+
+								    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-check-square">
+                                            Save
+                                        </i>
+                                    </button>
+								</div>
+							</form>
+						</div>
+					</div>				
+			</div>
+		</div>
+	</body>
+</html>
