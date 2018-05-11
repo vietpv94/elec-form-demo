@@ -1,5 +1,6 @@
 dist
-.vscode
-builds
+release
 node_modules
+builds
 package-lock.json
+.vscode

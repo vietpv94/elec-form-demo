@@ -1,12 +1,18 @@
-const {app, BrowserWindow} = require('electron')
-const path = require('path')
-const url = require('url')
+const {app, BrowserWindow} = require('electron');
+const path = require('path');
+const url = require('url');
 const appVersion = require('./package.json').version;
 const os = require('os').platform();
+const dotenv = require('dotenv');
 
 let win
 const electron = require('electron');
-const squirrelUrl = "'http://localhost:3000/updates/latest'";
+let squirrelUrl = "http://localhost:8080/updates/";
+
+/**
+ * Load environment variables from .env file, there's some configurations for dev.
+ */
+dotenv.load({ path: '.env.dev' });
 
 if (require('electron-squirrel-startup')) return;
 if (handleSquirrelEvent()) {
@@ -80,30 +86,28 @@ function handleSquirrelEvent() {
   }
 };
 const startAutoUpdater = (squirrelUrl) => {
-// The Squirrel application will watch the provided URL
-if (process.env.NODE_ENV !== 'development') {
-    squirrelUrl = os === 'darwin' ?
-      'https://macOSserver/updates/latest' : // just a placeholder
-      'http://WindowsServer/releases/win32'; // just a placeholder
-  }
-  
-electron.autoUpdater.setFeedURL(squirrelUrl + '?v=' + appVersion);
 
-// Display a success message on successful update
-electron.autoUpdater.addListener("update-downloaded", (event, releaseNotes, releaseName) => {
-    electron.dialog.showMessageBox({"message": `The release ${releaseName} has been downloaded`});
-});
+  squirrelUrl = os === 'darwin' ?
+    'http://localhost:8080/updates/darwin/latest':
+    'http://localhost:8080/updates/win32/latest';
 
-// Display an error message on update error
-electron.autoUpdater.addListener("error", (error) => {
-    electron.dialog.showMessageBox({"message": "Auto updater error: " + error});
-});
 
-// tell squirrel to check for updates
-electron.autoUpdater.checkForUpdates();
+  electron.autoUpdater.setFeedURL(squirrelUrl + '?v=' + appVersion);
+  console.log(electron.autoUpdater.getFeedURL())
+  // Display a success message on successful update
+  electron.autoUpdater.addListener("update-downloaded", (event, releaseNotes, releaseName) => {
+      electron.dialog.showMessageBox({"message": `The release ${releaseName} has been downloaded`});
+  });
+
+  // Display an error message on update error
+  electron.autoUpdater.addListener("error", (error) => {
+      electron.dialog.showMessageBox({"message": "Auto updater error: " + error});
+  });
+
+  // tell squirrel to check for updates
+  electron.autoUpdater.checkForUpdates();
 }
 function createWindow () {
-    if (process.env.NODE_ENV !== "dev") startAutoUpdater(squirrelUrl)
 
     win = new BrowserWindow({width: 900, height: 600})
 
@@ -118,16 +122,19 @@ function createWindow () {
     //   win = null
     // })
 }
-app.on('ready', createWindow)
+app.on('ready', () => {
+  createWindow();
+  if (process.env.NODE_ENV !== "dev") startAutoUpdater(squirrelUrl)
+})
 
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {
-    app.quit()
+      app.quit();
     }
 })
 
 app.on('activate', () => {
     if (win === null) {
-    createWindow()
+      createWindow();
     }
 })

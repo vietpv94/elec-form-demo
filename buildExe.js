@@ -5,7 +5,8 @@ resultPromise = electronInstaller.createWindowsInstaller({
     outputDirectory: './dist/installer',
     authors: 'Viet Pham',
     exe: 'electronformdemo.exe',
-    setupMsi: 'electrondemo.msi'
+    setupMsi: 'electrondemo.msi',
+    loadingGif:'./assets/gears.gif'
   });
 
 resultPromise.then(() => console.log("It worked!"), (e) => console.log(`No dice: ${e.message}`));
