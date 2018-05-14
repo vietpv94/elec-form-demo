@@ -4,3 +4,4 @@ node_modules
 builds
 package-lock.json
 .vscode
+electron-form-demo.dmg
