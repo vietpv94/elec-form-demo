@@ -24,8 +24,7 @@ if (os === 'darwin') {
   })
 
   function getInstallerConfig () {
-    const rootPath = path.join(__dirname, '')
-    const outPath = path.join(rootPath, 'builds')
+    const outPath = path.join(__dirname, 'builds')
   
     return Promise.resolve({
       appDirectory: path.join(outPath, 'electronformdemo-win32-x64'),
@@ -34,14 +33,14 @@ if (os === 'darwin') {
       noMsi: true,
       outputDirectory: path.join(outPath, 'windows-installer'),
       setupExe: 'ElectronFormDemoSetup.exe',
-      setupIcon: path.join(rootPath, 'assets', 'app-icon', 'win', 'app.ico'),
+      setupIcon: path.join(__dirname, 'assets', 'app-icon', 'win', 'app.ico'),
       skipUpdateIcon: true
     })
   }
   
   function deleteOutputFolder () {
     return new Promise((resolve, reject) => {
-      rimraf(path.join(__dirname, '..', 'builds', 'windows-installer'), (error) => {
+      rimraf(path.join(__dirname, 'builds', 'windows-installer'), (error) => {
         error ? reject(error) : resolve()
       })
     })
