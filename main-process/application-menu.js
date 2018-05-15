@@ -125,7 +125,6 @@ let template = [{
 }]
 
 function addUpdateMenuItems (items, position) {
-  //if (process.mas) return
 
   const version = app.getVersion()
   let updateItems = [{
@@ -213,11 +212,11 @@ if (process.platform === 'darwin') {
   addUpdateMenuItems(template[0].submenu, 1)
 }
 
-//if (process.platform === 'win32') {
+if (process.platform === 'win32') {
 
   const helpMenu = template[template.length - 1].submenu
   addUpdateMenuItems(helpMenu, 0)
-//}
+}
 
 app.on('ready', () => {
   const menu = Menu.buildFromTemplate(template)
