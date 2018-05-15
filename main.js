@@ -55,9 +55,6 @@ function handleSquirrelEvent() {
   const squirrelEvent = process.argv[1];
   switch (squirrelEvent) {
     case '--squirrel-install':
-      spawnUpdate(['--createShortcut', exeName]);
-      app.quit()
-      return true;
     case '--squirrel-updated':
       // Optionally do things such as:
       // - Add your .exe to the PATH
@@ -139,7 +136,6 @@ function initialize() {
   files.forEach((file) => { require(file) })
   app.on('ready', () => {
     createWindow();
-    //startAutoUpdater(squirrelUrl)
   })
   
   app.on('window-all-closed', () => {
@@ -154,3 +150,5 @@ function initialize() {
       }
   })  
 }
+
+initialize()
