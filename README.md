@@ -16,3 +16,6 @@
 ## Running app
 
 - npm start
+
+## dev
+- npm run dev

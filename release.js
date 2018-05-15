@@ -5,7 +5,6 @@ const opts = {
 }
 
 if (os === 'darwin') {
-
   const createDMG = require('electron-installer-dmg')
   createDMG(opts, function done (err) {
     if (err) 

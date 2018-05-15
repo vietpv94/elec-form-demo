@@ -1,12 +1,13 @@
-const {app, BrowserWindow} = require('electron');
+const {app, BrowserWindow, autoUpdater, dialog, Menu} = require('electron');
 const path = require('path');
+const glob = require('glob');
 const url = require('url');
 const appVersion = require('./package.json').version;
 const os = require('os').platform();
 const dotenv = require('dotenv');
 
-let win
-const electron = require('electron');
+let win;
+let state = 'checking';
 let squirrelUrl = "http://localhost:8080/updates/";
 
 /**
@@ -54,6 +55,9 @@ function handleSquirrelEvent() {
   const squirrelEvent = process.argv[1];
   switch (squirrelEvent) {
     case '--squirrel-install':
+      spawnUpdate(['--createShortcut', exeName]);
+      app.quit()
+      return true;
     case '--squirrel-updated':
       // Optionally do things such as:
       // - Add your .exe to the PATH
@@ -63,7 +67,7 @@ function handleSquirrelEvent() {
       // Install desktop and start menu shortcuts
       spawnUpdate(['--createShortcut', exeName]);
 
-      setTimeout(electron.quit, 1000);
+      setTimeout(app.quit, 1000);
       return true;
 
     case '--squirrel-uninstall':
@@ -73,7 +77,7 @@ function handleSquirrelEvent() {
       // Remove desktop and start menu shortcuts
       spawnUpdate(['--removeShortcut', exeName]);
 
-      setTimeout(electron.quit, 1000);
+      setTimeout(app.quit, 1000);
       return true;
 
     case '--squirrel-obsolete':
@@ -83,30 +87,34 @@ function handleSquirrelEvent() {
 
       app.quit();
       return true;
+    default:
+      initialize()
   }
 };
-const startAutoUpdater = (squirrelUrl) => {
+const startAutoUpdater = () => {
 
   squirrelUrl = os === 'darwin' ?
     'http://localhost:8080/updates/darwin/latest':
     'http://localhost:8080/updates/win32/latest';
 
 
-  electron.autoUpdater.setFeedURL(squirrelUrl + '?v=' + appVersion);
-  console.log(electron.autoUpdater.getFeedURL())
+  autoUpdater.setFeedURL(squirrelUrl + '?v=' + appVersion);
+
   // Display a success message on successful update
-  electron.autoUpdater.addListener("update-downloaded", (event, releaseNotes, releaseName) => {
-      electron.dialog.showMessageBox({"message": `The release ${releaseName} has been downloaded`});
+  autoUpdater.addListener("update-downloaded", (event, releaseNotes, releaseName) => {
+      dialog.showMessageBox({"message": `The release ${releaseName} has been downloaded`});
   });
 
   // Display an error message on update error
-  electron.autoUpdater.addListener("error", (error) => {
-      electron.dialog.showMessageBox({"message": "Auto updater error: " + error});
+  autoUpdater.addListener("error", (error) => {
+      dialog.showMessageBox({"message": "Auto updater error: " + error});
   });
 
   // tell squirrel to check for updates
-  electron.autoUpdater.checkForUpdates();
+  autoUpdater.checkForUpdates();
 }
+module.exports.startAutoUpdater = startAutoUpdater;
+
 function createWindow () {
 
     win = new BrowserWindow({width: 900, height: 600})
@@ -115,26 +123,34 @@ function createWindow () {
     pathname: path.join(__dirname, 'index.html'),
     protocol: 'file:',
     slashes: true
-    }))
+    }));
 
-    // win.webContents.openDevTools()
-    // win.on('closed', () => {
-    //   win = null
-    // })
+    const debug = /--debug/.test(process.argv[2]);
+
+    if (debug) {
+      win.webContents.openDevTools()
+      win.maximize()
+      require('devtron').install()
+    }
 }
-app.on('ready', () => {
-  createWindow();
-  if (process.env.NODE_ENV !== "dev") startAutoUpdater(squirrelUrl)
-})
 
-app.on('window-all-closed', () => {
-    if (process.platform !== 'darwin') {
-      app.quit();
-    }
-})
-
-app.on('activate', () => {
-    if (win === null) {
-      createWindow();
-    }
-})
+function initialize() {
+  const files = glob.sync(path.join(__dirname, 'main-process/**/*.js'))
+  files.forEach((file) => { require(file) })
+  app.on('ready', () => {
+    createWindow();
+    //startAutoUpdater(squirrelUrl)
+  })
+  
+  app.on('window-all-closed', () => {
+      if (process.platform !== 'darwin') {
+        app.quit();
+      }
+  })
+  
+  app.on('activate', () => {
+      if (win === null) {
+        createWindow();
+      }
+  })  
+}
